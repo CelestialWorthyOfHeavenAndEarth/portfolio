@@ -1,5 +1,6 @@
 const menuButton = document.querySelector('.menu-button');
 const mobileNav = document.querySelector('.mobile-nav');
+const header = document.querySelector('.site-header');
 menuButton?.addEventListener('click', () => {
   const open = mobileNav.classList.toggle('open');
   menuButton.classList.toggle('open', open);
@@ -19,6 +20,17 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { rootMargin: '-38% 0px -52% 0px', threshold: 0 });
 sections.forEach(section => observer.observe(section));
+
+const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 32);
+updateHeader();
+window.addEventListener('scroll', updateHeader, { passive: true });
+
+document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => {
+  const target = document.querySelector(link.getAttribute('href'));
+  if (!target) return;
+  event.preventDefault();
+  target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+}));
 
 const orb = document.querySelector('.cursor-orb');
 if (window.matchMedia('(pointer:fine)').matches && orb) {
